@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>DropCaptcha — Create</title>
+<style>
+body {
+  font-family: sans-serif;
+  background: #f4f4f4;
+}
+.box {
+  max-width: 420px;
+  margin: 40px auto;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+}
+label {
+  display: block;
+  margin-top: 10px;
+}
+button {
+  margin-top: 20px;
+  padding: 10px;
+  width: 100%;
+}
+pre {
+  background: #eee;
+  padding: 10px;
+  overflow-x: auto;
+}
+</style>
+</head>
+<body>
+
+<div class="box">
+  <h2>Create DropCaptcha</h2>
+
+  <label>
+    Тип капчи:
+    <select id="type">
+      <option value="drag-apple">Перетащи яблоко</option>
+      <option value="pick-fruits">Выбери фрукты</option>
+    </select>
+  </label>
+
+  <label>
+    Тема:
+    <select id="theme">
+      <option value="light">Светлая</option>
+      <option value="dark">Тёмная</option>
+    </select>
+  </label>
+
+  <label>
+    Разрешённый домен:
+    <input id="domain" placeholder="example.com">
+  </label>
+
+  <button onclick="createCaptcha()">Создать капчу</button>
+
+  <pre id="result"></pre>
+</div>
+
+<script>
+async function createCaptcha() {
+  const res = await fetch(
+    "https://dropcaptcha.k90183621.workers.dev/api/create-captcha",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        type: document.getElementById("type").value,
+        theme: document.getElementById("theme").value,
+        domain: document.getElementById("domain").value
+      })
+    }
+  );
+
+  const data = await res.json();
+  document.getElementById("result").textContent =
+    JSON.stringify(data, null, 2);
+}
+</script>
+
+</body>
+</html>
